@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SiberÇeviri",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "THM / HTB / PortSwigger anlatımlarını ve Udemy / arcX video altyazılarını kodlara ve payload'lara dokunmadan Türkçeye çevirir.",
   "permissions": ["storage", "unlimitedStorage", "contextMenus", "activeTab", "scripting"],
   "host_permissions": [

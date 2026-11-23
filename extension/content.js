@@ -22,6 +22,33 @@
   // -------------------------------------------------------------------------
   // Metin çıkarma ve geri yazma
   // -------------------------------------------------------------------------
+  // Kullanıcının göremediği metin (gizli talimat için kullanılabilir) çeviriye gönderilmez.
+  const rgba = c => {
+    const m = String(c).match(/rgba?\(([^)]+)\)/);
+    if (!m) return null;
+    const p = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+    return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+  };
+  function bgOf(node) {
+    for (let n = node; n && n.nodeType === 1; n = n.parentElement) {
+      const c = rgba(getComputedStyle(n).backgroundColor);
+      if (c && c.a > 0.5) return c;
+    }
+    return { r: 255, g: 255, b: 255, a: 1 };
+  }
+  function isHidden(node) {
+    const cs = getComputedStyle(node);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse') return true;
+    if (parseFloat(cs.opacity) < 0.1 || parseFloat(cs.fontSize) < 5) return true;
+    const fg = rgba(cs.color);
+    if (fg) {
+      if (fg.a < 0.1) return true;
+      const bg = bgOf(node);
+      if (Math.abs(fg.r - bg.r) + Math.abs(fg.g - bg.g) + Math.abs(fg.b - bg.b) < 30) return true;
+    }
+    return false;
+  }
+
   function extract(el) {
     const codes = [];
     let out = '';
@@ -29,6 +56,7 @@
       for (const ch of node.childNodes) {
         if (ch.nodeType === 3) { out += ch.nodeValue; continue; }
         if (ch.nodeType !== 1) continue;
+        if (isHidden(ch)) continue;
         if (INLINE_CODE.has(ch.tagName)) { out += `__C${codes.length}__`; codes.push(ch.textContent); continue; }
         if (ch.tagName === 'BR') { out += '\n'; continue; }
         if (ch.matches(CAND) || ch.matches(NO_WALK)) continue; // iç içe bloklar kendi başına çevrilir
@@ -106,6 +134,7 @@
         for (const el of queue) {
           queue.delete(el);
           if (!el.isConnected || el.dataset.scDone) continue;
+          if (isHidden(el)) { el.dataset.scDone = 'skip'; continue; }
           const { text, codes } = extract(el);
           if (!worthTranslating(text)) { el.dataset.scDone = 'skip'; continue; }
           batch.push({ el, text, codes });
