@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "name": "SiberÇeviri",
+  "version": "1.3.2",
+  "description": "THM / HTB / PortSwigger anlatımlarını ve Udemy / arcX video altyazılarını kodlara ve payload'lara dokunmadan Türkçeye çevirir.",
+  "permissions": ["storage", "unlimitedStorage", "contextMenus", "activeTab", "scripting"],
+  "host_permissions": [
+    "https://api.anthropic.com/*",
+    "https://translate.googleapis.com/*",
+    "https://*.arcx.io/*",
+    "https://*.vimeo.com/*",
+    "https://*.vimeocdn.com/*",
+    "https://*.wistia.com/*",
+    "https://*.wistia.net/*",
+    "https://*.mediadelivery.net/*",
+    "https://*.b-cdn.net/*",
+    "https://*.mux.com/*",
+    "https://*.vdocipher.com/*",
+    "https://*.cloudfront.net/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://tryhackme.com/*",
+        "https://*.tryhackme.com/*",
+        "https://*.hackthebox.com/*",
+        "https://portswigger.net/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.udemy.com/*"],
+      "js": ["content.js", "udemy.js"],
+      "css": ["content.css", "udemy.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://arcx.io/*", "https://*.arcx.io/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://arcx.io/*", "https://*.arcx.io/*",
+        "https://player.vimeo.com/*",
+        "https://fast.wistia.net/*", "https://fast.wistia.com/*",
+        "https://iframe.mediadelivery.net/*",
+        "https://player.mux.com/*",
+        "https://*.vdocipher.com/*"
+      ],
+      "all_frames": true,
+      "js": ["udemy.js"],
+      "css": ["udemy.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": { "default_popup": "popup.html", "default_title": "SiberÇeviri" },
+  "commands": {
+    "translate-selection": {
+      "suggested_key": { "default": "Alt+T" },
+      "description": "Seçili metni Türkçeye çevir"
+    },
+    "toggle-page": {
+      "suggested_key": { "default": "Alt+Y" },
+      "description": "Sayfa çevirisini aç / kapat"
+    },
+    "toggle-captions": {
+      "suggested_key": { "default": "Alt+U" },
+      "description": "Video Türkçe altyazı (Udemy/arcX): kapalı / TR+EN / sadece TR"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+SiberÇeviri — kurulum ve kullanım
+=================================
+
+1) EKLENTİYİ YÜKLE (1 dakika)
+   Edge  : adres çubuğuna  edge://extensions   yaz
+   Chrome: adres çubuğuna  chrome://extensions yaz
+   - "Geliştirici modu"nu aç
+   - "Paketlenmemiş öğe yükle" → bu klasörü seç (SiberCeviri Eklenti)
+   - Yapboz simgesinden SiberÇeviri'yi araç çubuğuna sabitle
+
+2) KULLANIM
+   - TryHackMe / HTB / PortSwigger sayfasında sağ alttaki yeşil "TR" düğmesi
+     ya da Alt+Y → sayfa çevirisi açılır. Her paragrafın altına Türkçesi gelir.
+     Kodlar, komutlar ve payload'lar olduğu gibi kalır.
+   - Bir cümleyi seç → Alt+T (veya sağ tık → SiberÇeviri) → açılan kutuda çeviri.
+     "★ Deftere ekle" ile kaydedersin, defter eklenti penceresinde.
+   - Başka sitelerde de çalışır: sağ tık menüsünden veya kısayolla.
+   - Bir sitede çeviriyi açık bırakırsan, bir sonraki ziyarette kendiliğinden açılır.
+
+2b) UDEMY TÜRKÇE ALTYAZI
+   - Eklentiyi güncelledikten sonra chrome://extensions'ta SiberÇeviri → "Yeniden yükle", Udemy sekmesinde F5.
+   - CC açmana gerek yok: eklenti dersin İngilizce transkriptini kendisi alır, çevirir,
+     videoyla senkron Türkçe altyazı gösterir.
+   - Sol alttaki "TR" düğmesi ya da Alt+U:
+       kapalı → Türkçe + İngilizce (yeşil) → sadece Türkçe (sarı) → kapalı
+   - "Döküm" düğmesi: dersin tamamının Türkçe transkripti. Bir satıra tıklarsan video oraya gider,
+     "Kopyala" ile tüm Türkçe metni panoya alıp not defterine yapıştırabilirsin.
+   - Seçim hatırlanır, sonraki derslerde de açık kalır. Tam ekranda Alt+U çalışır.
+   - Transkript bulunamazsa yedek yol: CC → English aç, eklenti ekrandaki altyazıyı canlı çevirir.
+   - Ücretsiz Google kullanılır, Claude harcaması yok.
+
+2c) ARCX (members.arcx.io) TÜRKÇE ALTYAZI  (v1.3.0)
+   - Udemy'deki gibi: videonun sol altındaki "TR" düğmesi ya da Alt+U, "Döküm" düğmesi.
+   - Eklenti dersin İngilizce altyazı dosyasını kendisi bulmaya çalışır (Vimeo / Wistia / Bunny / Mux
+     gömülü oynatıcılar ve HTML5 altyazı izleri).
+   - Bulamazsa: oynatıcıda CC → English aç, ekrandaki altyazıyı canlı çevirir.
+   - Videonun kendisinde hiç İngilizce altyazı yoksa çevirecek metin de yoktur.
+
+3) CLAUDE (İSTEĞE BAĞLI — ücret kontrolü)
+   API anahtarı girmezsen her şey ücretsiz Google ile çalışır, hiçbir şey ödemezsin.
+
+   Claude çevirisi istersen:
+   a) console.anthropic.com → hesap aç → Billing → en düşük miktarda kredi yükle
+   b) ÖNEMLİ: "Auto-reload" (otomatik yükleme) KAPALI kalsın.
+      Ön ödemeli kredi bitince API durur; kartından fazladan para ÇEKİLEMEZ.
+   c) API Keys → anahtar oluştur → eklenti penceresine yapıştır → Kaydet
+   d) Eklentideki "Aylık bütçe kilidi" (varsayılan $1) ikinci emniyet:
+      limit dolunca Claude durur, Google'a geçilir.
+
+   Tahmini maliyet (Claude Haiku 5.5):
+   - Alt+T ile bir seçim     ≈ 0,02 cent   ($1 ≈ 5000 seçim)
+   - Uzun bir THM odası      ≈ 0,5–1 cent  (yalnızca "Claude" modunda)
+   - Aynı metin önbellekte tutulur, ikinci kez ödeme yapılmaz.
+
+   Modlar:
+   - Hibrit (önerilen): sayfa Google (bedava), seçim Claude
+   - Sadece Google    : tamamen ücretsiz
+   - Claude           : sayfa da Claude (en kaliteli, en pahalı ama yine de çok ucuz)
+
+4) SÖZLÜK
+   glossary.js dosyasına kendi terimlerini ekleyebilirsin:
+     ["privilege escalation", "yetki yükseltme"]  → "yetki yükseltme (privilege escalation)"
+     ["payload", null]                            → hiç çevrilmez
+   Değişiklikten sonra eklentiler sayfasında SiberÇeviri'nin "Yeniden yükle" düğmesine bas.
+
+Güncelleme sonrası sayfada "Eklenti yeniden yüklendi" uyarısı görürsen F5 yap.

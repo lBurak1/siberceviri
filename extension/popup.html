@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>SiberÇeviri</title>
+<style>
+  :root { --bg:#0f172a; --card:#111c33; --line:#1e293b; --fg:#e2e8f0; --mut:#94a3b8; --acc:#22c55e; --warn:#f59e0b; }
+  * { box-sizing: border-box; }
+  body { margin:0; width:360px; background:var(--bg); color:var(--fg); font:13px/1.5 system-ui,"Segoe UI",sans-serif; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--line); }
+  h1 { margin:0; font-size:15px; color:var(--acc); letter-spacing:.02em; }
+  .sub { color:var(--mut); font-size:11px; }
+  section { padding:10px 14px; border-bottom:1px solid var(--line); }
+  label { display:block; font-weight:600; margin-bottom:4px; }
+  select, input { width:100%; background:var(--card); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font:inherit; }
+  .row { display:flex; gap:6px; }
+  .row > * { flex:1; }
+  button { background:var(--card); color:var(--fg); border:1px solid #334155; border-radius:6px; padding:6px 10px; cursor:pointer; font:inherit; }
+  button:hover { border-color:var(--acc); }
+  button.primary { background:var(--acc); color:#0f172a; border-color:var(--acc); font-weight:700; }
+  .hint { color:var(--mut); font-size:11.5px; margin-top:5px; }
+  .warn { color:var(--warn); }
+  .bar { height:7px; background:var(--card); border-radius:4px; overflow:hidden; margin:6px 0 3px; border:1px solid var(--line); }
+  .bar > i { display:block; height:100%; background:var(--acc); width:0; }
+  .spent { display:flex; justify-content:space-between; font-variant-numeric:tabular-nums; }
+  #defter { max-height:170px; overflow-y:auto; margin-top:6px; }
+  .w { padding:5px 0; border-top:1px dashed var(--line); display:flex; gap:6px; }
+  .w div { flex:1; min-width:0; }
+  .w .en { color:var(--mut); font-size:11.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .w button { padding:0 6px; border:none; color:var(--mut); }
+  kbd { background:var(--card); border:1px solid #334155; border-radius:4px; padding:0 4px; font-size:11px; }
+  .saved { color:var(--acc); font-size:11.5px; margin-left:6px; }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>SiberÇeviri</h1><div class="sub">THM · HTB · PortSwigger → Türkçe</div></div>
+  <button class="primary" id="toggle">Sayfayı çevir</button>
+</header>
+
+<section>
+  <label for="engine">Çeviri motoru</label>
+  <select id="engine">
+    <option value="hibrit">Hibrit — sayfa Google, seçim Claude (önerilen)</option>
+    <option value="google">Sadece Google — tamamen ücretsiz</option>
+    <option value="claude">Claude — sayfa + seçim (en kaliteli)</option>
+  </select>
+  <div class="hint" id="engineHint"></div>
+</section>
+
+<section>
+  <label for="key">Claude API anahtarı</label>
+  <div class="row">
+    <input id="key" type="password" placeholder="sk-ant-..." autocomplete="off">
+    <button id="saveKey" style="flex:0 0 auto">Kaydet</button>
+  </div>
+  <div class="hint">Anahtar yalnızca bu tarayıcıda saklanır ve sadece api.anthropic.com'a gönderilir. Anahtar yoksa her şey ücretsiz Google ile çalışır.</div>
+</section>
+
+<section>
+  <label for="budget">Aylık Claude bütçe kilidi ($)</label>
+  <div class="row">
+    <input id="budget" type="number" min="0" step="0.25">
+    <button id="saveBudget" style="flex:0 0 auto">Kaydet</button>
+  </div>
+  <div class="bar"><i id="barFill"></i></div>
+  <div class="spent"><span>Bu ay harcanan</span><span id="spent">$0.0000</span></div>
+  <div class="hint">Limit dolunca Claude kendiliğinden durur, Google'a geçer. Ekstra güvenlik için Anthropic konsolunda <b>otomatik yüklemeyi (auto-reload) kapalı</b> tut.</div>
+</section>
+
+<section>
+  <label>Kısayollar</label>
+  <div><kbd>Alt+Y</kbd> sayfa çevirisini aç/kapat &nbsp; <kbd>Alt+T</kbd> seçili metni çevir</div>
+  <div class="hint">Sağ tık menüsünde de var. Kısayolları değiştirmek için: <span id="shortcuts" style="text-decoration:underline;cursor:pointer">kısayol ayarları</span></div>
+</section>
+
+<section>
+  <div class="row" style="align-items:center">
+    <label style="margin:0">Kelime defteri <span class="sub" id="count"></span></label>
+    <button id="copy" style="flex:0 0 auto">Kopyala</button>
+  </div>
+  <div id="defter"></div>
+</section>
+
+<section style="border:none">
+  <button id="clearCache">Çeviri önbelleğini temizle</button><span class="saved" id="msg"></span>
+</section>
+
+<script src="popup.js"></script>
+</body>
+</html>
