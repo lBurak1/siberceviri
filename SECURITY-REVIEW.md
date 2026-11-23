@@ -25,8 +25,9 @@ race condition also allowed concurrent requests to exceed the monthly budget loc
 v1.4.0 adds defence in depth: hidden-text filtering before data leaves the page, per-request unguessable
 segment markers, input marker neutralisation, an explicit untrusted-data rule in the system prompt, strict
 output validation with fallback to the non-LLM engine, and an atomic budget reservation. In the offline
-harness all 9 injection scenarios and both integrity checks fail against v1.3.2 (except the control) and are
-contained in v1.4.0, with no false positives on 10 honest reference translations.
+harness, all 8 injection scenarios (T1–T4, T6–T9) and both integrity checks (B1, C1) succeed against v1.3.2
+and are contained in v1.4.0. The control case still works, and 10 honest reference translations pass with no
+false positives.
 
 | ID | Finding | OWASP LLM 2025 | Severity | v1.3.2 | v1.4.0 |
 |---|---|---|---|---|---|
@@ -112,7 +113,7 @@ marked "Mitigated" rather than "Fixed".
 ### F-04 — Cache poisoning (Low)
 
 Every successful injection in v1.3.2 was written to `chrome.storage.local` and served again on later visits
-(8 of 8 vulnerable scenarios). In v1.4.0 only validated outputs are cached (0 of 9).
+(8 of 8 vulnerable scenarios). In v1.4.0 only validated outputs are cached (0 of 8).
 
 ### F-05 — Budget lock race (Low)
 
